@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*.db.sqlite3
+
+.idea
+__init__.py
+
+.gitconfig
+
+*migrations
+
+venv/

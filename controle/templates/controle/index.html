@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+  <title>Controle de Estoque</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <script src="estoque.js"></script>
+    <script>
+    // Add active class to the current button (highlight it)
+function menu(){
+  
+var header = document.getElementById("nav");
+var btns = header.getElementsByClassName("lnk");
+
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+  var current = document.getElementsByClassName("active");
+  if (current.length > 0) { 
+    current[0].className = current[0].className.replace(" active", "");
+  }
+  this.className += " active";
+  });
+}
+  btns[0].className = " active";
+}
+  </script>
+</head>
+<body onload="menu()">
+  <div id="container">
+    <div id="header">
+      <h1>Controle de Estoque</h1>      
+    </div>
+    <div id="footer">
+    <p class="footer">ProgramaAção - <a class="footer" href="https://www.programaacao.com.br/home" target="_blank">www.programaacao.com.br</a><span class="footer">versão: 1.0.0</span></p>
+    </div>
+    <div id="contents">
+      <div id="nav">
+        <ul>
+        <li><a class="lnk" href="{% url 'vwProdutos' %}" target="iframe">Produtos</a></li>
+        <li><a class="lnk" href="vwEntradas.html" target="iframe">Entrada</a></li>
+        <li><a class="lnk" href="vwSaidas.html" target="iframe">Saída</a></li>
+        <li><a class="lnk" href="{% url 'estoque' %}" target="iframe">Estoque</a></li>
+      </ul>
+      </div>
+      <div id="cont">
+        <!--<iframe src="{% url 'vwProdutos' %}" height="415" width="1020" name="iframe"></iframe>-->
+      {% block content %}
+      {% endblock %}
+
+
+      </div>
+       
+    </div>
+         
+  </div>
+
+</body>
+</html>

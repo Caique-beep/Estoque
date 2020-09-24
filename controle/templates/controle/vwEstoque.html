@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+{% extends 'controle/index.html' %}
+{% load static %}
+
+<head>
+<title>Produtos</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <script src="estoque.js"></script>
+</head>
+{% block content %}
+<body>
+      <div id="tbl">
+        <div class="buttonBar">
+
+        <a href="{% url 'produtosAdd' %}">Novo Produto</a>
+        </div>
+        <table id="grid">
+          <th>Código</th>
+          <th>Descrição</th>
+          <th>Entradas</th>
+          <th>Saidas</th>
+          <th>Balanço</th>
+          <th>Custo</th>
+          <th>Custo Estimado</th>
+          <th>Preço</th>
+          <th>Venda Esperada</th>
+          <th>Editar</th>
+          <th>Apagar</th>
+          {% for est in estoque %}
+           <tr>
+             <td>
+               {{est.produtos.id}}
+             </td>
+             <td>
+               {{est.produtos.descricao}}
+             </td>
+             <td>
+               {{est.produtos.custo}}
+             </td>
+             <td>
+               {{est.produtos.preco}}
+             </td>
+             <td>
+               <a href="{% url 'produtosEdit' prod.id %}">Editar</a>
+             </td>
+             <td>
+               <a href="">Apagar</a>
+             </td>
+           </tr>
+
+          {% endfor %}
+        </table>
+
+
+      </div>
+</body>
+{% endblock %}
+</html>

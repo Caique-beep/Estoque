@@ -1,15 +1,55 @@
 <!DOCTYPE html>
 <html>
+{% extends 'controle/index.html' %}
+{% load static %}
+
 <head>
-<title>Entradas</title>
-  <link rel="stylesheet" type="text/css" href="style.css">
+<title>Produtos</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <script src="estoque.js"></script>
 </head>
+{% block content %}
 <body>
-  <div class="buttonBar">
-    <button onclick="javascript:window.open('entrada.html','iframe');">Adicionar Entrada</button>
-  </div>
-  <div id="tbl"></div> 
+
+      <div id="tbl">
+        <div class="buttonBar">
+
+        <a href="{% url 'entradasAdd' %}">Nova Entrada</a>
+        </div>
+        <table id="grid">
+          <th>Código</th>
+          <th>Descrição</th>
+          <th>Quantidade</th>
+          <th>Data</th>
+          <th>Editar</th>
+          <th>Apagar</th>
+          {% for entradas in entradas %}
+           <tr>
+             <td>
+               {{entradas.codigo.id}}
+             </td>
+             <td>
+               {{entradas.codigo.descricao}}
+             </td>
+             <td>
+               {{entradas.quantidade}}
+             </td>
+             <td>
+               {{entradas.data}}
+             </td>
+             <td>
+               <a >Editar</a>
+             </td>
+             <td>
+               <a >Apagar</a>
+             </td>
+           </tr>
+
+          {% endfor %}
+        </table>
+
+
+      </div>
 </body>
-<script>vwEntradas();</script>
+{% endblock %}
 </html>

@@ -51,3 +51,5 @@ class Estoque(models.Model):
         decimal_places=2
     )
 
+    def __str__(self):
+        return self.produto.descricao

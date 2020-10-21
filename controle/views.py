@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .forms import ProdutosForm
-from .models import Produtos, Estoque
+from .forms import ProdutosForm, EntradasForm
+from .models import Produtos, Estoque, Entrada
 
 
 def vwProdutos(request):
@@ -23,6 +23,9 @@ def produtos_add(request):
             print(est_form.custo_estimado, 'Custp')
             est_form.save()
             print(est_form.custo_estimado, 'Custpaaaa')
+
+            ent_form = Entrada(codigo=produtos, quantidade=0)
+            ent_form.save()
             return redirect('vwProdutos')
 
     data['prod_form']= ProdutosForm
@@ -33,13 +36,13 @@ def produtos_add(request):
 
 def produtos_edit(request, pk):
     data = {}
-    prod = Produtos.objects.get(pk=pk)
+    prod = Produtos.objects.filter(pk=pk)
     form = ProdutosForm(request.POST or None, instance=prod)
     if form.is_valid():
         form.save()
         return redirect('vwProdutos')
     data['produtos'] = prod
-    data['form'] = form
+    data['prod_form'] = form
     return render(request, 'controle/produtosAdd.html', data)
 
 
@@ -50,5 +53,38 @@ def produtos_del(request, pk):
 
 
 def estoque(request):
+    data = {}
     est = Estoque.objects.all()
-    return render(request, 'controle/vwEstoque.html', {est: 'estoque'})
+    data['estoque'] = est
+    return render(request, 'controle/vwEstoque.html', data)
+
+
+def vwEntradas(request):
+    data = {}
+    ent = Entrada.objects.all()
+    data['entradas'] = ent
+    return render(request, 'controle/vwEntradas.html', data)
+
+"""
+def entradas_edit(request, pk):
+    data = {}
+
+    ent = Entrada.objects.get(pk=pk)
+    print("aaaa")
+    form = EntradasForm(request.POST or None, instance=ent)
+    if form.is_valid():
+        form.save()
+        return redirect('vwEntrada')
+    data['entradas'] = ent
+    data['ent_form'] = form
+    return render(request, 'controle/entradasAdd.html', data)
+"""
+
+def entradasAdd(request):
+    data = {}
+    if request.method == 'POST':
+        ent_form = EntradasForm(request.POST)
+        ent_form.save()
+        return redirect('vwEntrada')
+    data['entrada'] = EntradasForm
+    return render(request,'controle/entradasAdd.html', data)

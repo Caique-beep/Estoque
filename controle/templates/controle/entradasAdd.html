@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% extends 'controle/index.html' %}
+{% block content %}
+<body>
+    <div>
+        <form method="post" class="form-group">
+            {% csrf_token %}
+            {{ entrada.as_p}}
+
+
+            <button type="submit" class="btn btn-success" >Enviar</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
+</html>

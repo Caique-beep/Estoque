@@ -1,5 +1,5 @@
 from django.contrib.auth.forms import forms
-from .models import Produtos
+from .models import Produtos, Entrada
 
 
 class ProdutosForm(forms.ModelForm):
@@ -10,5 +10,13 @@ class ProdutosForm(forms.ModelForm):
     class Meta:
         model = Produtos
         fields = ['descricao', 'custo', 'preco']
+
+
+class EntradasForm(forms.ModelForm):
+    quantidade = forms.IntegerField(max_value=None)
+
+    class Meta:
+        model = Entrada
+        fields = ['quantidade']
 
 

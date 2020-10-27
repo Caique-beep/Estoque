@@ -24,8 +24,6 @@ def produtos_add(request):
             est_form.save()
             print(est_form.custo_estimado, 'Custpaaaa')
 
-            ent_form = Entrada(codigo=produtos, quantidade=0)
-            ent_form.save()
             return redirect('vwProdutos')
 
     data['prod_form']= ProdutosForm
@@ -65,26 +63,18 @@ def vwEntradas(request):
     data['entradas'] = ent
     return render(request, 'controle/vwEntradas.html', data)
 
-"""
-def entradas_edit(request, pk):
-    data = {}
 
-    ent = Entrada.objects.get(pk=pk)
-    print("aaaa")
-    form = EntradasForm(request.POST or None, instance=ent)
-    if form.is_valid():
-        form.save()
-        return redirect('vwEntrada')
-    data['entradas'] = ent
-    data['ent_form'] = form
-    return render(request, 'controle/entradasAdd.html', data)
-"""
+def entradasAdd(request,pk):
 
-def entradasAdd(request):
     data = {}
+    prod = Produtos.objects.get(pk=pk)
+    form = EntradasForm(request.POST or None, instance=prod)
     if request.method == 'POST':
-        ent_form = EntradasForm(request.POST)
-        ent_form.save()
+        print(prod.id)
+        post = form.save(commit=False)
+
+        post.save()
         return redirect('vwEntrada')
+
     data['entrada'] = EntradasForm
     return render(request,'controle/entradasAdd.html', data)

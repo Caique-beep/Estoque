@@ -13,10 +13,11 @@ class ProdutosForm(forms.ModelForm):
 
 
 class EntradasForm(forms.ModelForm):
+
     quantidade = forms.IntegerField(max_value=None)
 
     class Meta:
         model = Entrada
-        fields = ['quantidade']
+        fields = [ 'quantidade']
 
 

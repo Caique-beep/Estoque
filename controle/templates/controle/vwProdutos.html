@@ -21,6 +21,7 @@
           <th>Descrição</th>
           <th>Custo</th>
           <th>Preço</th>
+          <th>Adicionar Entrada</th>
           <th>Editar</th>
           <th>Apagar</th>
           {% for prod in produtos %}
@@ -36,6 +37,9 @@
              </td>
              <td>
                {{prod.preco}}
+             </td>
+             <td>
+               <a href="{% url 'entradasAdd' prod.id %} ">Nova Entrada</a>
              </td>
              <td>
                <a href="{% url 'produtosEdit' prod.id %}">Editar</a>

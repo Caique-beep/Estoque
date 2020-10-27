@@ -26,6 +26,5 @@ urlpatterns = [
     path('prod_del/<int:pk>/', views.produtos_del, name='produtosDel'),
     path('Estoque/', views.estoque, name='vwEstoque'),
     path('Entrada/', views.vwEntradas, name='vwEntrada'),
-    path('ebtradasAdd/', views.entradasAdd, name='entradasAdd')
-    #ath('entradasEdit/<int:pk>/', views.entradas_edit, name='entradasEdit'),
+    path('entradasAdd/<int:pk>/', views.entradasAdd, name='entradasAdd'),
 ]

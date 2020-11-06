@@ -18,6 +18,6 @@ class EntradasForm(forms.ModelForm):
 
     class Meta:
         model = Entrada
-        fields = [ 'quantidade']
+        fields = [ 'quantidade', 'descricao']
 
 

@@ -70,7 +70,7 @@ def entradasAdd(request,pk):
     prod = Produtos.objects.get(pk=pk)
     form = EntradasForm(request.POST or None, instance=prod)
     if request.method == 'POST':
-        print(prod.id)
+
         post = form.save(commit=False)
 
         post.save()
@@ -78,3 +78,14 @@ def entradasAdd(request,pk):
 
     data['entrada'] = EntradasForm
     return render(request,'controle/entradasAdd.html', data)
+
+
+def nova_entrada(request):
+    data = {}
+    form = EntradasForm(request.POST or None, instance=prod)
+    if request.method == 'POST':
+        post = form.save(commit=False)
+        post.save()
+        return redirect('vwEntrada')
+    data['entrada'] = form
+    return render(request, 'controle/nova_entrada.html', data)

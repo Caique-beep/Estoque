@@ -4,28 +4,10 @@
 <head>
   <title>Controle de Estoque</title>
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-  <script src="estoque.js"></script>
-    <script>
-    // Add active class to the current button (highlight it)
-function menu(){
-  
-var header = document.getElementById("nav");
-var btns = header.getElementsByClassName("lnk");
+  <script src="{% static 'javascript/estoque.js' %}" ></script>
 
-for (var i = 0; i < btns.length; i++) {
-  btns[i].addEventListener("click", function() {
-  var current = document.getElementsByClassName("active");
-  if (current.length > 0) { 
-    current[0].className = current[0].className.replace(" active", "");
-  }
-  this.className += " active";
-  });
-}
-  btns[0].className = " active";
-}
-  </script>
 </head>
-<body onload="menu()">
+<body>
   <div id="container">
     <div id="header">
       <h1>Controle de Estoque</h1>      
@@ -36,10 +18,10 @@ for (var i = 0; i < btns.length; i++) {
     <div id="contents">
       <div id="nav">
         <ul>
-        <li><a class="lnk" href="{% url 'vwProdutos' %}" target="iframe">Produtos</a></li>
-        <li><a class="lnk" href="{% url 'vwEntrada' %}" target="iframe">Entrada</a></li>
+        <li><a class="lnk" href="{% url 'vwProdutos' %}" target="_parent">Produtos</a></li>
+        <li><a class="lnk" href="{% url 'vwEntrada' %}" target="_parent">Entrada</a></li>
         <li><a class="lnk" href="vwSaidas.html" target="iframe">Saída</a></li>
-        <li><a class="lnk" href="{% url 'vwEstoque' %}" target="iframe">Estoque</a></li>
+        <li><a class="lnk" href="{% url 'vwEstoque' %}" target="_parent">Estoque</a></li>
       </ul>
       </div>
       <div id="cont">
@@ -55,4 +37,5 @@ for (var i = 0; i < btns.length; i++) {
   </div>
 
 </body>
+<script>menu()</script>
 </html>

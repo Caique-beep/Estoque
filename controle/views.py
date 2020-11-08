@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ProdutosForm, EntradasForm
 from .models import Produtos, Estoque, Entrada
 
@@ -18,15 +18,11 @@ def produtos_add(request):
         if prod_form.is_valid():
             produtos = prod_form.save(commit=False)
             produtos.save()
-
-            est_form = Estoque(produto=produtos,entradas = 0, saidas= 0, balanco=0, custo_estimado=0,venda_esperada=0)
-            print(est_form.custo_estimado, 'Custp')
+            est_form = Estoque(produto=produtos, entradas=0, saidas=0,
+                               balanco=0, custo_estimado=0, venda_esperada=0)
             est_form.save()
-            print(est_form.custo_estimado, 'Custpaaaa')
-
             return redirect('vwProdutos')
-
-    data['prod_form']= ProdutosForm
+    data['prod_form'] = ProdutosForm
     data['est_form'] = Estoque
 
     return render(request, "controle/produtosAdd.html", data)
@@ -34,7 +30,7 @@ def produtos_add(request):
 
 def produtos_edit(request, pk):
     data = {}
-    prod = Produtos.objects.filter(pk=pk)
+    prod = Produtos.objects.get(pk=pk)
     form = ProdutosForm(request.POST or None, instance=prod)
     if form.is_valid():
         form.save()
@@ -64,28 +60,46 @@ def vwEntradas(request):
     return render(request, 'controle/vwEntradas.html', data)
 
 
-def entradasAdd(request,pk):
-
-    data = {}
-    prod = Produtos.objects.get(pk=pk)
-    form = EntradasForm(request.POST or None, instance=prod)
-    if request.method == 'POST':
-
-        post = form.save(commit=False)
-
-        post.save()
-        return redirect('vwEntrada')
-
-    data['entrada'] = EntradasForm
-    return render(request,'controle/entradasAdd.html', data)
-
-
 def nova_entrada(request):
     data = {}
-    form = EntradasForm(request.POST or None, instance=prod)
+    form = EntradasForm(request.POST or None)
+    prod = Produtos.objects.all()
     if request.method == 'POST':
         post = form.save(commit=False)
+        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
+        post.descricao = selected_item
+        prd = Produtos.objects.get(descricao=selected_item)
+        print(prd.id)
+        post.codigo_id = prd.id
         post.save()
+
+
+        est = Estoque.objects.get(pk=prd.id)
+        est.entradas = est.entradas + post.quantidade
+        est.save()
         return redirect('vwEntrada')
+    data['prod'] = prod
     data['entrada'] = form
     return render(request, 'controle/nova_entrada.html', data)
+
+
+def entrada_edit(request, pk):
+    data = {}
+    ent = Entrada.objects.get(pk=pk)
+    form = EntradasForm(request.POST or None, instance=ent)
+    prod = Produtos.objects.all()
+    if request.method == 'POST':
+        post = form.save(commit=False)
+        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
+        post.descricao = str(selected_item)
+        post.save()
+        return redirect('vwEntrada')
+    data['prod'] = prod
+    data['entrada'] = form
+    return render(request, 'controle/nova_entrada.html', data)
+
+
+def entrada_del(request, pk):
+    produto_deletar = Entrada.objects.get(pk=pk)
+    produto_deletar.delete()
+    return redirect('vwEntrada')

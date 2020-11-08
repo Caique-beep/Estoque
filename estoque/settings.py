@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'estoque.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'estoque',
+        'NAME': 'bdd_estoque',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',

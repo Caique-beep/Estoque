@@ -15,9 +15,10 @@ class ProdutosForm(forms.ModelForm):
 class EntradasForm(forms.ModelForm):
 
     quantidade = forms.IntegerField(max_value=None)
+    data = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
 
     class Meta:
         model = Entrada
-        fields = [ 'quantidade', 'descricao']
+        fields = ['quantidade', 'data']
 
 

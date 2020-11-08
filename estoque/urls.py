@@ -26,6 +26,7 @@ urlpatterns = [
     path('prod_del/<int:pk>/', views.produtos_del, name='produtosDel'),
     path('Estoque/', views.estoque, name='vwEstoque'),
     path('Entrada/', views.vwEntradas, name='vwEntrada'),
-    path('entradasAdd/<int:pk>/', views.entradasAdd, name='entradasAdd'),
-    path('nova_entrada/', views.nova_entrada, name='nova_entrada')
+    path('nova_entrada/', views.nova_entrada, name='nova_entrada'),
+    path('entradaEdit/<int:pk>/', views.entrada_edit, name='entradaEdit'),
+    path('ent_del/<int:pk>/', views.entrada_del, name='entradaDel'),
 ]

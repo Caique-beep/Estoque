@@ -25,8 +25,7 @@
           <th>Custo Estimado</th>
           <th>Preço</th>
           <th>Venda Esperada</th>
-          <th>Editar</th>
-          <th>Apagar</th>
+
           {% for estoque in estoque %}
            <tr>
              <td>
@@ -36,32 +35,27 @@
                {{estoque.produto.descricao}}
              </td>
              <td>
-               {{entradas}}
+               {{estoque.entradas}}
              </td>
              <td>
-               {{saidas}}
+               {{estoque.saidas}}
              </td>
              <td>
-               {{balanco}}
+               {{estoque.balanco}}
              </td>
              <td>
                {{estoque.produto.custo}}
              </td>
              <td>
-               {{custo_estimado}}
+               {{estoque.custo_estimado}}
              </td>
              <td>
                {{estoque.produto.preco}}
              </td>
              <td>
-               {{venda_esperada}}
+               {{estoque.venda_esperada}}
              </td>
-             <td>
-               <a href="{% url 'produtosEdit' estoque.produto.id %}">Editar</a>
-             </td>
-             <td>
-               <a href="">Apagar</a>
-             </td>
+
            </tr>
 
           {% endfor %}

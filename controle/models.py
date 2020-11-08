@@ -20,10 +20,10 @@ class Produtos(models.Model):
 
 
 class Entrada(models.Model):
-
+    codigo = models.ForeignKey(Produtos, on_delete=models.CASCADE)
     descricao = models.CharField(max_length=50)
     quantidade = models.IntegerField('Quantidade')
-    data = models.DateField(auto_now=True)
+    data = models.DateField(verbose_name='Data')
 
 
 class Saida(models.Model):

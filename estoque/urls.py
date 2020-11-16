@@ -29,4 +29,6 @@ urlpatterns = [
     path('nova_entrada/', views.nova_entrada, name='nova_entrada'),
     path('entradaEdit/<int:pk>/', views.entrada_edit, name='entradaEdit'),
     path('ent_del/<int:pk>/', views.entrada_del, name='entradaDel'),
+    path('Saida/', views.vwSaidas, name='vwSaida'),
+    path('nova_saida/', views.nova_saida, name='nova_saida'),
 ]

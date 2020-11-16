@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import ProdutosForm, EntradasForm
-from .models import Produtos, Estoque, Entrada
+from .forms import ProdutosForm, EntradasForm, SaidasForm
+from .models import Produtos, Estoque, Entrada, Saida
+from decimal import Decimal
 
 
 def vwProdutos(request):
@@ -20,6 +21,7 @@ def produtos_add(request):
             produtos.save()
             est_form = Estoque(produto=produtos, entradas=0, saidas=0,
                                balanco=0, custo_estimado=0, venda_esperada=0)
+            est_form.pk = produtos.id
             est_form.save()
             return redirect('vwProdutos')
     data['prod_form'] = ProdutosForm
@@ -69,13 +71,16 @@ def nova_entrada(request):
         selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
         post.descricao = selected_item
         prd = Produtos.objects.get(descricao=selected_item)
-        print(prd.id)
         post.codigo_id = prd.id
         post.save()
 
-
         est = Estoque.objects.get(pk=prd.id)
         est.entradas = est.entradas + post.quantidade
+        est.balanco = est.entradas - est.saidas
+        cust_est = Decimal(est.balanco) * Decimal(prd.custo)
+        est.custo_estimado = cust_est
+        prc = Decimal(est.balanco) * Decimal(prd.preco)
+        est.venda_esperada = prc
         est.save()
         return redirect('vwEntrada')
     data['prod'] = prod
@@ -103,3 +108,37 @@ def entrada_del(request, pk):
     produto_deletar = Entrada.objects.get(pk=pk)
     produto_deletar.delete()
     return redirect('vwEntrada')
+
+
+def vwSaidas(request):
+    data = {}
+    saida = Saida.objects.all()
+    data['saidas'] = saida
+    return render(request, 'controle/vwSaidas.html', data)
+
+
+def nova_saida(request):
+    data = {}
+    form = SaidasForm(request.POST or None)
+    prod = Produtos.objects.all()
+    if request.method == 'POST':
+        post = form.save(commit=False)
+        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
+        post.descricao = selected_item
+        prd = Produtos.objects.get(descricao=selected_item)
+        post.codigo_id = prd.id
+        post.save()
+
+        est = Estoque.objects.get(pk=prd.id)
+        est.saidas = est.saidas + post.quantidade
+        est.balanco = est.entradas - est.saidas
+        cust_est = Decimal(est.balanco) * Decimal(prd.custo)
+        est.custo_estimado = cust_est
+        prc = Decimal(est.balanco) * Decimal(prd.preco)
+        est.venda_esperada = prc
+        est.save()
+
+        return redirect('vwSaida')
+    data['prod'] = prod
+    data['saida'] = form
+    return render(request, 'controle/nova_saida.html', data)

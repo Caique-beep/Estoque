@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+{% extends 'controle/index.html' %}
+{% block content %}
+<body>
+    <div>
+        <form method="post" class="form-group">
+
+            {% csrf_token %}
+            Descrição:
+                <select name="descricao">
+                    {% for entry in prod %}
+                        <option value="{{ entry.descricao }}">{{entry.descricao}}</option>
+                    {% endfor %}
+                </select>
+
+            {{ saida.as_p}}
+            <!--<input type="date" name="data" value="{{entrada.data}}">-->
+
+
+
+            <button type="submit" class="btn btn-success" >Enviar</button>
+        </form>
+    </div>
+</body>
+{% endblock %}
+</html>

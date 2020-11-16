@@ -30,7 +30,7 @@ class Saida(models.Model):
     codigo = models.ForeignKey(Produtos, on_delete=models.CASCADE)
     descricao = models.CharField(max_length=50)
     quantidade = models.IntegerField('Quantidade')
-    data = models.DateField(auto_now=True)
+    data = models.DateField(verbose_name='Data')
 
 
 class Estoque(models.Model):
@@ -40,14 +40,14 @@ class Estoque(models.Model):
     balanco = models.IntegerField('Balanço', default=0)
     custo_estimado = models.DecimalField(
         'Custo estimado',
-        max_digits=5,
+        max_digits=10,
         decimal_places=2,
         default=0.00
     )
 
     venda_esperada = models.DecimalField(
         'Venda Esperada',
-        max_digits=5,
+        max_digits=10,
         decimal_places=2
     )
 

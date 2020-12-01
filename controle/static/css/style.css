@@ -9,6 +9,13 @@ body {
   margin-bottom: 5px;
 }
 
+.searchbar {
+  float: right
+
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 #header {  
   position: fixed;
   top: 0;

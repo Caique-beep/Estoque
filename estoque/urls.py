@@ -31,4 +31,7 @@ urlpatterns = [
     path('ent_del/<int:pk>/', views.entrada_del, name='entradaDel'),
     path('Saida/', views.vwSaidas, name='vwSaida'),
     path('nova_saida/', views.nova_saida, name='nova_saida'),
+    path('saidaEdit/<int:pk>/', views.saida_edit, name='saidaEdit'),
+    path('saida_del/<int:pk>/', views.saida_del, name='saida_del'),
+    path('searchbar/', views.searchbar, name='searchbar'),
 ]

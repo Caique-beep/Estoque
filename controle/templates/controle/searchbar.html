@@ -11,49 +11,32 @@
 </head>
 {% block content %}
 <body>
-
-      <div id="tbl">
-        <div class="buttonBar">
-
-          <a href="{% url 'nova_entrada' %}">Nova Entrada</a>
-
-        </div>
-        <div class="buttonBar">
-          <form action="{% url 'searchbar' %}" method="get">
-            <input type="text" name="search"/>
-            <button type="submit">Pesquisar</button>
-
-          </form>
-        </div>
         <table id="grid">
           <th>Descrição</th>
           <th>Quantidade</th>
           <th>Data</th>
           <th>Editar</th>
           <th>Apagar</th>
-          {% for entradas in entradas %}
+          {% for post in post %}
            <tr>
 
              <td>
-               {{entradas.descricao}}
+               {{post.descricao}}
              </td>
              <td>
-               {{entradas.quantidade}}
+               {{post.quantidade}}
              </td>
              <td>
-               {{entradas.data}}
+               {{post.data}}
              </td>
              <td>
-               <a href="{% url 'entradaEdit' entradas.id %}">Editar</a>
+               <a href="{% url 'entradaEdit' post.id %}">Editar</a>
              </td>
              <td>
-               <a href="{% url 'entradaDel' entradas.id %}">Apagar</a>
+               <a href="{% url 'entradaDel' post.id %}">Apagar</a>
              </td>
            </tr>
-
           {% endfor %}
-        </table>
-      </div>
 </body>
 
 {% endblock %}

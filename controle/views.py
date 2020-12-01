@@ -36,6 +36,12 @@ def produtos_edit(request, pk):
     form = ProdutosForm(request.POST or None, instance=prod)
     if form.is_valid():
         form.save()
+        est = Estoque.objects.get(pk=prod.id)
+        cust_est = Decimal(est.balanco) * Decimal(prod.custo)
+        est.custo_estimado = cust_est
+        prc = Decimal(est.balanco) * Decimal(prod.preco)
+        est.venda_esperada = prc
+        est.save()
         return redirect('vwProdutos')
     data['produtos'] = prod
     data['prod_form'] = form
@@ -74,14 +80,7 @@ def nova_entrada(request):
         post.codigo_id = prd.id
         post.save()
 
-        est = Estoque.objects.get(pk=prd.id)
-        est.entradas = est.entradas + post.quantidade
-        est.balanco = est.entradas - est.saidas
-        cust_est = Decimal(est.balanco) * Decimal(prd.custo)
-        est.custo_estimado = cust_est
-        prc = Decimal(est.balanco) * Decimal(prd.preco)
-        est.venda_esperada = prc
-        est.save()
+        att_estoque(prd.id, prd, True)
         return redirect('vwEntrada')
     data['prod'] = prod
     data['entrada'] = form
@@ -97,7 +96,12 @@ def entrada_edit(request, pk):
         post = form.save(commit=False)
         selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
         post.descricao = str(selected_item)
+        prd = Produtos.objects.get(descricao=selected_item)
+        post.codigo_id = prd.id
         post.save()
+
+        att_estoque(prd.id, prd, True)
+
         return redirect('vwEntrada')
     data['prod'] = prod
     data['entrada'] = form
@@ -129,16 +133,60 @@ def nova_saida(request):
         post.codigo_id = prd.id
         post.save()
 
-        est = Estoque.objects.get(pk=prd.id)
-        est.saidas = est.saidas + post.quantidade
-        est.balanco = est.entradas - est.saidas
-        cust_est = Decimal(est.balanco) * Decimal(prd.custo)
-        est.custo_estimado = cust_est
-        prc = Decimal(est.balanco) * Decimal(prd.preco)
-        est.venda_esperada = prc
-        est.save()
+        att_estoque(prd.id, prd, False)
 
         return redirect('vwSaida')
     data['prod'] = prod
     data['saida'] = form
     return render(request, 'controle/nova_saida.html', data)
+
+
+def saida_edit(request, pk):
+    data = {}
+    sd = Saida.objects.get(pk=pk)
+    form = SaidasForm(request.POST or None, instance=sd)
+    prod = Produtos.objects.all()
+    if request.method == 'POST':
+        post = form.save(commit=False)
+        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
+        post.descricao = str(selected_item)
+        prd = Produtos.objects.get(descricao=selected_item)
+        post.codigo_id = prd.id
+        post.save()
+
+        att_estoque(prd.id, prd, False)
+
+        return redirect('vwSaida')
+    data['prod'] = prod
+    data['saida'] = form
+    return render(request, 'controle/nova_saida.html', data)
+
+
+def saida_del(request, pk):
+    saida_deletar = Saida.objects.get(pk=pk)
+    saida_deletar.delete()
+    return redirect('vwSaida')
+
+
+def att_estoque(val_id, prd, chave):
+    est = Estoque.objects.get(pk=val_id)
+    if chave:
+        ent = Entrada.objects.filter(codigo_id=val_id).values('quantidade')
+        est.entradas = sum([i['quantidade'] for i in ent])
+
+    else:
+        ent = Saida.objects.filter(codigo_id=val_id).values('quantidade')
+        est.saidas = sum([i['quantidade'] for i in ent])
+    est.balanco = est.entradas - est.saidas
+    cust_est = Decimal(est.balanco) * Decimal(prd.custo)
+    est.custo_estimado = cust_est
+    prc = Decimal(est.balanco) * Decimal(prd.preco)
+    est.venda_esperada = prc
+    est.save()
+
+
+def searchbar(request):
+    if request.method == 'GET':
+        search = request.GET.get('search')
+        post = Entrada.objects.all().filter(descricao=search)
+        return render(request, 'controle/searchbar.html', {'post':post})

@@ -25,6 +25,9 @@ class Entrada(models.Model):
     quantidade = models.IntegerField('Quantidade')
     data = models.DateField(verbose_name='Data')
 
+    def __int__(self):
+        return self.quantidade
+
 
 class Saida(models.Model):
     codigo = models.ForeignKey(Produtos, on_delete=models.CASCADE)

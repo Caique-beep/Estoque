@@ -61,111 +61,15 @@ def estoque(request):
     return render(request, 'controle/vwEstoque.html', data)
 
 
-def vwEntradas(request):
-    data = {}
-    ent = Entrada.objects.all()
-    data['entradas'] = ent
-    return render(request, 'controle/vwEntradas.html', data)
 
 
-def nova_entrada(request):
-    data = {}
-    form = EntradasForm(request.POST or None)
-    prod = Produtos.objects.all()
-    if request.method == 'POST':
-        post = form.save(commit=False)
-        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
-        post.descricao = selected_item
-        prd = Produtos.objects.get(descricao=selected_item)
-        post.codigo_id = prd.id
-        post.save()
-
-        att_estoque(prd.id, prd, True)
-        return redirect('vwEntrada')
-    data['prod'] = prod
-    data['entrada'] = form
-    return render(request, 'controle/nova_entrada.html', data)
 
 
-def entrada_edit(request, pk):
-    data = {}
-    ent = Entrada.objects.get(pk=pk)
-    form = EntradasForm(request.POST or None, instance=ent)
-    prod = Produtos.objects.all()
-    if request.method == 'POST':
-        post = form.save(commit=False)
-        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
-        post.descricao = str(selected_item)
-        prd = Produtos.objects.get(descricao=selected_item)
-        post.codigo_id = prd.id
-        post.save()
-
-        att_estoque(prd.id, prd, True)
-
-        return redirect('vwEntrada')
-    data['prod'] = prod
-    data['entrada'] = form
-    return render(request, 'controle/nova_entrada.html', data)
 
 
-def entrada_del(request, pk):
-    produto_deletar = Entrada.objects.get(pk=pk)
-    produto_deletar.delete()
-    return redirect('vwEntrada')
 
 
-def vwSaidas(request):
-    data = {}
-    saida = Saida.objects.all()
-    data['saidas'] = saida
-    return render(request, 'controle/vwSaidas.html', data)
 
-
-def nova_saida(request):
-    data = {}
-    form = SaidasForm(request.POST or None)
-    prod = Produtos.objects.all()
-    if request.method == 'POST':
-        post = form.save(commit=False)
-        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
-        post.descricao = selected_item
-        prd = Produtos.objects.get(descricao=selected_item)
-        post.codigo_id = prd.id
-        post.save()
-
-        att_estoque(prd.id, prd, False)
-
-        return redirect('vwSaida')
-    data['prod'] = prod
-    data['saida'] = form
-    return render(request, 'controle/nova_saida.html', data)
-
-
-def saida_edit(request, pk):
-    data = {}
-    sd = Saida.objects.get(pk=pk)
-    form = SaidasForm(request.POST or None, instance=sd)
-    prod = Produtos.objects.all()
-    if request.method == 'POST':
-        post = form.save(commit=False)
-        selected_item = get_object_or_404(prod, descricao=request.POST.get('descricao'))
-        post.descricao = str(selected_item)
-        prd = Produtos.objects.get(descricao=selected_item)
-        post.codigo_id = prd.id
-        post.save()
-
-        att_estoque(prd.id, prd, False)
-
-        return redirect('vwSaida')
-    data['prod'] = prod
-    data['saida'] = form
-    return render(request, 'controle/nova_saida.html', data)
-
-
-def saida_del(request, pk):
-    saida_deletar = Saida.objects.get(pk=pk)
-    saida_deletar.delete()
-    return redirect('vwSaida')
 
 
 def att_estoque(val_id, prd, chave):
@@ -185,8 +89,3 @@ def att_estoque(val_id, prd, chave):
     est.save()
 
 
-def searchbar(request):
-    if request.method == 'GET':
-        search = request.GET.get('search')
-        post = Entrada.objects.all().filter(descricao=search)
-        return render(request, 'controle/searchbar.html', {'post':post})
